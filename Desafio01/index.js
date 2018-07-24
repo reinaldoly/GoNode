@@ -21,23 +21,19 @@ app.get('/', (req, res) => {
 });
 
 app.post('/check', (req, res, next) => {
-  const { name, birthdate } = req.body;
-  const age = moment().diff(moment(birthdate, 'DD/MM/YYYY'), 'years');
+  const { name, birthDate } = req.body;
+  const age = moment().diff(moment(birthDate, 'DD/MM/YYYY'), 'years');
   if (age >= 18) {
-    res.redirect(`/major?nome=${name}`);
+    res.redirect(`/major?nome=${name}&birthDate=${birthDate}`);
   } else {
-    res.redirect(`/minor?nome=${name}`);
+    res.redirect(`/minor?nome=${name}&birthDate=${birthDate}`);
   }
   next();
 });
 
 const checkParamsMiddleware = (req, res, next) => {
-  const { nome } = req.query;
-  if (nome === '' || nome === undefined) {
-    res.redirect('/');
-  } else {
-    next();
-  }
+  const { nome, birthDate } = req.query;
+  return !nome || !birthDate ? res.redirect('/') : next();
 };
 
 app.get('/major', checkParamsMiddleware, (req, res) => {
