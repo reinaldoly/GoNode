@@ -1,0 +1,51 @@
+<section id="main">
+  <div class="container">
+    <header>
+      <h2>Exemplo de projeto</h2>
+      <div class="addon">
+        <form action="/app/projects/{{ activeProject }}?_method=DELETE" method="POST">
+          <button type="submit" class="btn btn-danger">Excluir projeto</button>
+        </form>
+      </div>
+    </header>
+
+    <section id="content">
+      <nav>
+        <div class="sessions">
+          {% for section in sections %}
+          <a href="/app/projects/{{ activeProject }}/sections/{{ section.id }}" class="{% if section.id == currentSection.id %}active{% endif %}">{{section.title}}</a>
+          {% endfor %}
+        </div>
+
+        <div class="list-header">
+          <a class="btn" href="#" data-modal-open="#new-section">NOVA SEÇÃO</a>
+        </div>
+      </nav>
+      {% if currentSection.id %}
+      <article>
+        <div class="project-header">
+          <h1>{{currentSection.title}}</h1>
+         <a href="#" data-modal-open="#edit-section" class="edit">Editar</a> |
+          <form action="/app/projects/{{ activeProject }}/sections/{{ currentSection.id }}?_method=DELETE" method="POST">
+             <button class="btn-link" type="submit">Remover</button>
+          </form>
+        </div>
+
+        <p>{{currentSection.formattedContent | safe}}</p>
+
+      </article>
+      {% endif %}
+    </section>
+  </div>
+</section>
+
+<div class="modal" id="new-section">
+  <form class="modal-content" method="POST" action="/app/projects/{{ activeProject }}/sections/create">
+    <input type="text" name="title" placeholder="Título do seção">
+    <div class="content-container">
+      <textarea name="content" class="mde" placeholder="Conteúdo da seção"></textarea>
+    </div>
+    <button type="submit">SALVAR SEÇÃO</button>
+    <a href="#" data-modal-close="#new-section">CANCELAR</a>
+  </form>
+</div>
